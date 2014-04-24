@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/Vince/Desktop/FRC%20Kickoff/RevereJava/Revere2014J/src/k12/revere/frc/s2014/systems/ControlSystem.java</file>
+            <file>file:/C:/Users/Vince/Desktop/FRC%20Kickoff/RevereJava/Revere2014J/src/k12/revere/frc/s2014/util/logging/LoggerImpl.java</file>
+            <file>file:/C:/Users/Vince/Desktop/FRC%20Kickoff/RevereJava/Revere2014J/src/k12/revere/frc/s2014/util/logging/Level.java</file>
+            <file>file:/C:/Users/Vince/Desktop/FRC%20Kickoff/RevereJava/Revere2014J/src/k12/revere/frc/s2014/ticktasks/DebugTickTask.java</file>
+            <file>file:/C:/Users/Vince/Desktop/FRC%20Kickoff/RevereJava/Revere2014J/src/k12/revere/frc/s2014/ticktasks/Auton2014Task.java</file>
+            <file>file:/C:/Users/Vince/Desktop/FRC%20Kickoff/RevereJava/Revere2014J/src/k12/revere/frc/s2014/systems/WinchSystem.java</file>
+            <file>file:/C:/Users/Vince/Desktop/FRC%20Kickoff/RevereJava/Revere2014J/src/k12/revere/frc/s2014/systems/System.java</file>
+            <file>file:/C:/Users/Vince/Desktop/FRC%20Kickoff/RevereJava/Revere2014J/src/k12/revere/frc/s2014/ticktasks/WinchOperationTask.java</file>
+            <file>file:/C:/Users/Vince/Desktop/FRC%20Kickoff/RevereJava/Revere2014J/src/k12/revere/frc/s2014/systems/input/JoystickRevere.java</file>
+            <file>file:/C:/Users/Vince/Desktop/FRC%20Kickoff/RevereJava/Revere2014J/src/k12/revere/frc/s2014/Robot.java</file>
+            <file>file:/C:/Users/Vince/Desktop/FRC%20Kickoff/RevereJava/Revere2014J/src/k12/revere/frc/s2014/systems/SensorSystem.java</file>
+            <file>file:/C:/Users/Vince/Desktop/FRC%20Kickoff/RevereJava/Revere2014J/src/k12/revere/frc/s2014/systems/DriveSystem.java</file>
+            <file>file:/C:/Users/Vince/Desktop/FRC%20Kickoff/RevereJava/Revere2014J/src/k12/revere/frc/s2014/systems/motor/InvertableVictor.java</file>
+            <file>file:/C:/Users/Vince/Desktop/FRC%20Kickoff/RevereJava/Revere2014J/src/k12/revere/frc/s2014/util/logging/Logger.java</file>
+            <file>file:/C:/Users/Vince/Desktop/FRC%20Kickoff/RevereJava/Revere2014J/src/k12/revere/frc/s2014/ticktasks/TickTask.java</file>
+        </group>
+    </open-files>
+</project-private>
