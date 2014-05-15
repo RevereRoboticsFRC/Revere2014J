@@ -1,74 +1,60 @@
 package k12.revere.frc.s2014.systems;
 
 import com.sun.squawk.util.Arrays;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import k12.revere.frc.s2014.systems.System;
-import k12.revere.frc.s2014.systems.input.JoystickRevere;
+import k12.revere.frc.s2014.Robot;
 
 /**
  *
  * @author Vince
  */
-public class ControlSystem implements System {
+public abstract class ControlSystem implements SubSystem {
     
-    //  Control Port Constants
-    public static final int INPUT_JOYSTICK = 0;
-    //  Debug Name Constants
-    public static final String JOYSTICK_MAGNITUDE_DBG = "jmi";
-    public static final String JOYSTICK_DIRECTION_DBG = "jdi";
-    //  Joystick Constants
-    public static final int JOYSTICK_NUM_BUTTONS = 12;
     
-    private final DriveSystem driveSystem;
-    private final WinchSystem winchSystem;
-    private final JoystickRevere joystick;
-    private final boolean[] lastTickButtonState;
-    private final boolean[] currentTickButtonState;
+    protected final Robot robot;
+    protected final DriveSystem driveSystem;
+    protected final WinchSystem winchSystem;
+    protected final boolean[] lastTickButtonState;
+    protected final boolean[] currentTickButtonState;
     
-    public ControlSystem(DriveSystem ds, WinchSystem ws) {
-        driveSystem = ds;
-        winchSystem = ws;
-        joystick = new JoystickRevere(INPUT_JOYSTICK);
-        lastTickButtonState = new boolean[JOYSTICK_NUM_BUTTONS];
-        currentTickButtonState = new boolean[JOYSTICK_NUM_BUTTONS];
+    public ControlSystem(Robot r, int numButtons) {
+        if(numButtons < 0) {
+            throw new IllegalArgumentException("Number of buttons cannot be less than zero!");
+        }
+        robot = r;
+        driveSystem = robot.getDriveSystem();
+        winchSystem = robot.getWinchSystem();
+        lastTickButtonState = new boolean[numButtons];
+        currentTickButtonState = new boolean[numButtons];
     }
     
     public void reset() {
+        Robot.logger.entering("ControlSystem", "reset");
         //  Mark all the buttons as not pressed
         Arrays.fill(lastTickButtonState, false);
         Arrays.fill(currentTickButtonState, false);
+        Robot.logger.exiting("ControlSystem", "reset");
     }
     
     public void tick() {
         //  Update keystates
         //  Push previously new to last tick
-        java.lang.System.arraycopy(currentTickButtonState, 0, lastTickButtonState, 0, lastTickButtonState.length);
+        System.arraycopy(currentTickButtonState, 0, lastTickButtonState, 0, lastTickButtonState.length);
         //  Update current
-        for(int i = 0; i < JOYSTICK_NUM_BUTTONS; i++) {
-            currentTickButtonState[i] = joystick.getRawButton(i + 1);
+        for(int i = 0; i < currentTickButtonState.length; i++) {
+            currentTickButtonState[i] = getRawButton(i + 1);
         }
     }
     
-    public void teleopRobot() {
-        //  TODO
-        
-    }
+    public abstract boolean getRawButton(int id);
     
-    public double getJoyMagnitude() {
-        return joystick.getMagnitude();
-    }
-    
-    public double getJoyDegrees() {
-        return joystick.getDirectionDegrees();
-    }
+    public abstract void teleopRobot();
 
-    public void sendDebugInfo() {
-        SmartDashboard.putNumber(JOYSTICK_DIRECTION_DBG, joystick.getDirectionDegrees());
-        SmartDashboard.putNumber(JOYSTICK_MAGNITUDE_DBG, getJoyMagnitude());
-    }
+    public abstract void sendDebugInfo();
 
     public void stopAll() {
+        Robot.logger.entering("ControlSystem", "stopAll");
         reset();
+        Robot.logger.exiting("ControlSystem", "stopAll");
     }
     
     /**
@@ -76,7 +62,7 @@ public class ControlSystem implements System {
      * @param buttonId The button to check. <b>NOTE:</b> The button Id is NOT the same as the button number (on the physical joystick). <code>buttonId = buttonNumber - 1</code>
      * @return 
      */
-    public boolean getButtonState(int buttonId) {
+    public final boolean getButtonState(int buttonId) {
         //  Array safety
         if(buttonId < 0 || buttonId > currentTickButtonState.length) {
             return false;
@@ -84,7 +70,7 @@ public class ControlSystem implements System {
         return currentTickButtonState[buttonId];
     }
 
-    public boolean isButtonJustPressed(int buttonId) {
+    public final boolean isButtonJustPressed(int buttonId) {
         //  Array safety
         if(buttonId < 0 || buttonId > currentTickButtonState.length) {
             return false;
@@ -94,7 +80,7 @@ public class ControlSystem implements System {
         return isNowDown && !wasDown;
     }
     
-    public boolean isButtonJustReleased(int buttonId) {
+    public final boolean isButtonJustReleased(int buttonId) {
         //  Array safety
         if(buttonId < 0 || buttonId > currentTickButtonState.length) {
             return false;
@@ -104,7 +90,7 @@ public class ControlSystem implements System {
         return !isNowDown && wasDown;
     }
     
-    public boolean isButtonHeld(int buttonId) {
+    public final boolean isButtonHeld(int buttonId) {
         //  Array safety
         if(buttonId < 0 || buttonId > currentTickButtonState.length) {
             return false;

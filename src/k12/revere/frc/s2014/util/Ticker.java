@@ -54,7 +54,7 @@ public class Ticker {
             }
         } else {
             if(cantKeepUpTicks % secondsToTicks(1F) == 0) {
-                Robot.logger.severe("Can't keep up!");
+                Robot.logger.severe("Can't keep up! Behind by " + -diff + " ms");
             }
             cantKeepUpTicks++;
         }

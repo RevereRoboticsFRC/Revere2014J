@@ -89,21 +89,21 @@ public class LoggerImpl implements Logger {
     }
 
     public void entering(String className, String method) {
-        if (minLevel.compareTo(Level.TRACE) >= 0) {
+        if (minLevel.compareTo(Level.TRACE) > 0) {
             return;
         }
         log(Level.TRACE, "enter " + className + "." + method + "()");
     }
 
     public void exiting(String className, String method) {
-        if (minLevel.compareTo(Level.TRACE) >= 0) {
+        if (minLevel.compareTo(Level.TRACE) > 0) {
             return;
         }
         log(Level.TRACE, "exit " + className + "." + method + "()");
     }
 
     public void throwing(Level level, String className, String methodName, Throwable t) throws Throwable {
-        if (minLevel.compareTo(level) <= 0) {
+        if (minLevel.compareTo(level) < 0) {
             log(level, "Throwing " + className + "." + methodName, t);
         }
         throw t;

@@ -4,7 +4,7 @@ package k12.revere.frc.s2014.systems;
  *
  * @author Vince
  */
-public interface System {
+public interface SubSystem {
     
     public abstract void tick();
     

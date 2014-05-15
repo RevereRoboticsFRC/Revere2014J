@@ -4,10 +4,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.communication.UsageReporting;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import k12.revere.frc.s2014.systems.ControlSystem;
 import k12.revere.frc.s2014.systems.DriveSystem;
 import k12.revere.frc.s2014.systems.SensorSystem;
 import k12.revere.frc.s2014.systems.WinchSystem;
+import k12.revere.frc.s2014.systems.input.logitech.gamepadf310.LogitechGamepadControlSystem;
 import k12.revere.frc.s2014.ticktasks.Auton2014Task;
 import k12.revere.frc.s2014.ticktasks.DebugTickTask;
 import k12.revere.frc.s2014.ticktasks.TickTask;
@@ -46,14 +48,17 @@ public class Robot extends RobotBase {
      * An array of TickTasks that are currently active. YOU MUST MAINTAIN YOURSELF WHICH SLOT IS IN USE OR
      */
     private TickTask[] tickTasks;
+    
+//    private boolean isUsingDefaultWindow;
 
     public Robot() {
         super();
         ticker = new Ticker(50);
-        logger.setLoggingLevel(Level.ALL);
+        logger.setLoggingLevel(Level.DEBUG);
         currentMode = MODE_INIT;
         lastReceivedPacketTick = 0;
         tickTasks = new TickTask[INIT_NUM_TICK_TASKS];
+//        isUsingDefaultWindow = true;
     }
 
     public void startCompetition() {
@@ -112,12 +117,16 @@ public class Robot extends RobotBase {
         logger.log(Level.ALL, "Version " + VERSION);
         logger.log(Level.ALL, "Logging level set to " + logger.getLoggingLevel().toString());
         logger.log(Level.ALL, "Debug interval set to " + (DEBUG_INTERVAL_SEC * 1000F) + " milliseconds.");
+        
+        SmartDashboard.putString("vers", VERSION);
+        SmartDashboard.putString("log", logger.getLoggingLevel().toString());
+        SmartDashboard.putNumber("debug", DEBUG_INTERVAL_SEC * 1000F);
 
         //  System init
         driveSystem = new DriveSystem();
         winchSystem = new WinchSystem();
         sensorSystem = new SensorSystem();
-        controlSystem = new ControlSystem(driveSystem, winchSystem);
+        controlSystem = new LogitechGamepadControlSystem(this, 1);
 
         //  Debug init
         addTickTask(new DebugTickTask(this, ticker.secondsToTicks(DEBUG_INTERVAL_SEC)));
@@ -131,7 +140,6 @@ public class Robot extends RobotBase {
     public void robotIdleInit() {
         logger.entering("Robot", "robotIdleInit");
         stopAllSystems();
-        sensorSystem.calibrate();
         logger.exiting("Robot", "robotIdleInit");
     }
 
@@ -205,6 +213,7 @@ public class Robot extends RobotBase {
                 continue;
             }
             if (tickTask.isDone()) {
+                logger.info("Removed TickTask " + tickTask.getName());
                 tickTasks[i] = null;
                 continue;
             }
@@ -229,11 +238,16 @@ public class Robot extends RobotBase {
      * @return
      */
     public int addTickTask(TickTask task) {
+        if(task == null) {
+            logger.warning("YOU DON GOOFED MR PROGRAMMER, NO NULL TICKTASKS.");
+            throw new IllegalArgumentException("TickTask may not be null.");
+        }
         //  Find an open slot
         for (int i = 0; i < tickTasks.length; i++) {
             TickTask tickTask = tickTasks[i];
             if (tickTask == null || tickTask.isDone()) {
                 tickTasks[i] = task;
+                logger.info("Added TickTask " + task.getName());
                 return i;
             }
         }
@@ -251,6 +265,7 @@ public class Robot extends RobotBase {
         winchSystem.stopAll();
         sensorSystem.stopAll();
         controlSystem.stopAll();
+        logger.info("All systems stopped.");
     }
 
     public ControlSystem getControlSystem() {
@@ -281,4 +296,9 @@ public class Robot extends RobotBase {
         return ticker;
     }
 
+//    public boolean isUsingDefaultWindow() {
+//        return isUsingDefaultWindow;
+//    }
+
+    
 }

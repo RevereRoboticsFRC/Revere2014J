@@ -1,21 +1,23 @@
 package k12.revere.frc.s2014.systems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import k12.revere.frc.s2014.systems.System;
+import k12.revere.frc.s2014.Robot;
 import k12.revere.frc.s2014.systems.motor.InvertableVictor;
+import k12.revere.frc.s2014.util.QWordPacker;
 
 /**
  *
  * @author Vince
  */
-public class DriveSystem implements System {
+public class DriveSystem implements SubSystem {
     
     //  PWM Channel Constants
     public static final int PWM_LEFT_MOTOR = 2;
     public static final int PWM_RIGHT_MOTOR = 1;
     //  Debug Name Constants
-    public static final String LEFT_MOTOR_DBG = "tlm";
-    public static final String RIGHT_MOTOR_DBG = "trm";
+//    public static final String LEFT_MOTOR_DBG = "tlm";
+//    public static final String RIGHT_MOTOR_DBG = "trm";
+    public static final String MOTOR_DBG = "tmv";
     
     private InvertableVictor tractionLeft;
     private InvertableVictor tractionRight;
@@ -59,14 +61,21 @@ public class DriveSystem implements System {
     }
     
     public void sendDebugInfo() {
-        SmartDashboard.putNumber(LEFT_MOTOR_DBG, tractionLeft.getSpeed());
-        SmartDashboard.putNumber(RIGHT_MOTOR_DBG, tractionRight.getSpeed());
+        SmartDashboard.putNumber(MOTOR_DBG, QWordPacker.l2d(QWordPacker.packLOctoFloat255(
+                (float) tractionLeft.getSpeed(),
+                (float) tractionRight.getSpeed(),
+                0, 0, 0, 0, 0, 0)));
+        
+//        SmartDashboard.putNumber(LEFT_MOTOR_DBG, tractionLeft.getSpeed());
+//        SmartDashboard.putNumber(RIGHT_MOTOR_DBG, tractionRight.getSpeed());
     }
 
     public void stopAll() {
+        Robot.logger.entering("DriveSystem", "stopAll");
         //  A note of warning: calling stopMotor() DISABLES the motor (as well as stopping it). Call set(0) or halt() (for InvertableVictors).
         tractionLeft.halt();
         tractionRight.halt();
+        Robot.logger.exiting("DriveSystem", "stopAll");
     }
 
 }

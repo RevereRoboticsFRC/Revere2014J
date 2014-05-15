@@ -34,6 +34,7 @@ public class DebugTickTask extends TickTask {
 
     protected void forciblyTerminate() {
         //  Debug task cannot be forcibly terminated.
+        Robot.logger.warning("YOU CAN'T STOP MEH, I'M DEBUG!");
     }
 
     public String getName() {
